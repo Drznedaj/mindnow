@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+Hello, {{ user.username|default:'Guest' }}!
+
+<div>
+    <div>
+    {% if all_links %}
+    {% for lnk in all_links%}
+        <li> 
+            <a href="/redirect_func/{{lnk.id}}">
+                {{lnk}}
+            </a> created by {{lnk.user}} 
+        </li>
+    {% endfor %}
+    {% else %}
+    <div>No links made, make some links to see them listed here...</div>
+    {% endif %}
+    </div>
+    {% if user.is_authenticated %}
+    <a href="{% url 'logout' %}">Logout</a>
+    <a href="{% url 'password_change' %}">Change password</a>
+    {% else %}
+    <div>Guests can't create or edit links, please log in / register. :)</div>
+    <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+</div>
+
+
+{% endblock %}
