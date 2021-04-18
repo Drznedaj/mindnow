@@ -70,3 +70,23 @@ def create_url(request):
             candidate.user = request.user
             candidate.save()
             return redirect(reverse("create"))
+
+def edit_url(request, id):
+    
+    if request.method == "GET":
+
+        return render(
+            request,
+            "users/edit.html",
+            {"form": LinkForm, 'links':Link.objects.filter(link=id), "url": ShortLink.objects.get(id=id)},
+        )
+
+    elif request.method == "POST":
+
+        form = LinkForm(request.POST)
+
+        if form.is_valid():
+            candidate = form.save(commit=False)
+            candidate.link = ShortLink.objects.get(id=id)
+            candidate.save()
+            return redirect("edit_url", id)
