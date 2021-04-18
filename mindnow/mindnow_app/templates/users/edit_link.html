@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Edit a redirect link</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" name="edit" value="Add">
+</form>
+
+<a href="{% url 'edit_url' url_id%}">Back</a>
+<a href="{% url 'dashboard' %}">Back to dashboard</a>
+{% endblock %}

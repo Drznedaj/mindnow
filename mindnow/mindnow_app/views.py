@@ -96,3 +96,32 @@ def delete_link(request, id):
     link_id = link.link.id
     link.delete()
     return redirect("edit_url", link_id)
+
+def edit_link(request, id):
+
+    link = Link.objects.get(id=id)
+    
+    if request.method == "GET":
+        
+        form = LinkForm(instance=link)
+
+        return render(
+            request,
+            "users/edit_link.html",
+            {"form": form, 'link':Link.objects.get(id=id), "url_id": link.link.id},
+        )
+
+    elif request.method == "POST":
+
+        form = LinkForm(request.POST)
+
+        if form.is_valid():
+            form = LinkForm(request.POST, instance=link)
+            form.save()
+            return redirect("edit_url", link.link.id)
+        else:
+            return render(
+                request,
+                "users/edit_link.html",
+                {"form": form, 'link':Link.objects.get(id=id), "url_id": link.link.id},
+            )
