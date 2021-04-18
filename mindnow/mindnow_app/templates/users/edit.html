@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Edit a shortened url</h2>
+
+<div>{{url}}</div>
+<div>
+    {% if links %}
+        Redirect links:
+        {% for l in links %}
+        <li>
+            {{l.text}} {{lcountry}} {{l.weigth}} 
+            <a href="{% url "edit_link" l.id%}">Edit</a>
+            <a href="{% url "delete_url" l.id%}">Delete</a>
+        </li>
+        {% endfor %}
+    {%else%}
+    No redirect links here.
+    {%endif%}
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" name="edit" value="Add">
+</form>
+
+<a href="{% url 'dashboard' %}">Back to dashboard</a>
+{% endblock %}
