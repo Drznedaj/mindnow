@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import login
 from django.urls import reverse
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ShortLinkForm, LinkForm
 from .models import ShortLink, Link
 from random import choices
 
@@ -48,3 +48,25 @@ def register(request):
             login(request, user)
 
             return redirect(reverse("dashboard"))
+
+
+def create_url(request):
+
+    if request.method == "GET":
+
+        return render(
+            request,
+            "users/create.html",
+            {"forms": ShortLinkForm},
+        )
+
+    elif request.method == "POST":
+
+        form = ShortLinkForm(request.POST)
+
+        if form.is_valid():
+
+            candidate = form.save(commit=False)
+            candidate.user = request.user
+            candidate.save()
+            return redirect(reverse("create"))
