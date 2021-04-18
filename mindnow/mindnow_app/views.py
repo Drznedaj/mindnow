@@ -90,3 +90,9 @@ def edit_url(request, id):
             candidate.link = ShortLink.objects.get(id=id)
             candidate.save()
             return redirect("edit_url", id)
+
+def delete_link(request, id):
+    link = Link.objects.get(id=id)
+    link_id = link.link.id
+    link.delete()
+    return redirect("edit_url", link_id)

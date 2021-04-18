@@ -11,7 +11,7 @@
         <li>
             {{l.text}} {{lcountry}} {{l.weigth}} 
             <a href="{% url "edit_link" l.id%}">Edit</a>
-            <a href="{% url "delete_url" l.id%}">Delete</a>
+            <a href="{% url "delete_link" l.id%}">Delete</a>
         </li>
         {% endfor %}
     {%else%}
