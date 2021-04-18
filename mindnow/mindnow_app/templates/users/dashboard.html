@@ -8,7 +8,7 @@ Hello, {{ user.username|default:'Guest' }}!
     {% if all_links %}
     {% for lnk in all_links%}
         <li> 
-            <a href="/redirect_func/{{lnk.id}}">
+            <a href="{% url 'redirect_func' lnk.id %}">
                 {{lnk}}
             </a> created by {{lnk.user}} 
         </li>
