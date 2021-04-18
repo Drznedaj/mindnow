@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import login
 from django.urls import reverse
+from django.contrib.gis.geoip2 import GeoIP2
 from .forms import CustomUserCreationForm, ShortLinkForm, LinkForm
 from .models import ShortLink, Link
 from random import choices
@@ -17,6 +18,14 @@ def get_redirect_link(shid):
 def redirect_func(request, id):
     short_link_id = id
     link = get_redirect_link(short_link_id)
+
+    g = GeoIP2()
+
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[-1].strip()
+    else:
+        ip = request.META.get("REMOTE_ADDR")
 
     return redirect(link)
 

@@ -135,3 +135,5 @@ LOGOUT_REDIRECT_URL = "dashboard"
 
 EMAIL_HOST = "localhost"
 EMAIL_PORT = 1025
+
+GEOIP_PATH = "C:\\Users\\cvajb\\Downloads\\geoip"

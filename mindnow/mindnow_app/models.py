@@ -20,6 +20,7 @@ class Link(models.Model):
         blank=True,
         null=True,
     )
+    country_code = models.CharField(max_length=2, blank=True, null=True)
     link = models.ForeignKey(ShortLink, on_delete=models.CASCADE)
 
     def __str__(self):
