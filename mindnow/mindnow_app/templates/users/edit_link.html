@@ -6,7 +6,7 @@
 <form method="post">
     {% csrf_token %}
     {{form}}
-    <input type="submit" name="edit" value="Add">
+    <input type="submit" name="edit" value="Edit">
 </form>
 
 <a href="{% url 'edit_url' url_id%}">Back</a>

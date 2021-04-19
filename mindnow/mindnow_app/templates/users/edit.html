@@ -9,7 +9,7 @@
         Redirect links:
         {% for l in links %}
         <li>
-            {{l.text}} {{lcountry}} {{l.weigth}} 
+            {{l.text}} {{l.country_code}} {{l.weigth}} 
             <a href="{% url "edit_link" l.id%}">Edit</a>
             <a href="{% url "delete_link" l.id%}">Delete</a>
         </li>

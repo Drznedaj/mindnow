@@ -4,20 +4,45 @@ from django.urls import reverse
 from django.contrib.gis.geoip2 import GeoIP2
 from .forms import CustomUserCreationForm, ShortLinkForm, LinkForm
 from .models import ShortLink, Link
-from random import choices
+from random import choices, choice
 
+'''
+Does all of the logic for redirecting the user to linked pages
+@param shid, short link id for getting all of links
+@param country, country_code of the user
+@return None if there are problems, string of the link otherwise
+'''
+def get_redirect_link(shid, country):
 
-def get_redirect_link(shid):
     possible_links = Link.objects.filter(link_id=shid)
+
+    if not possible_links:
+        return None
+    
     weigths = possible_links.values_list("weigth", flat=True)
-    link = choices(possible_links, weigths, k=1)
+    countries = possible_links.values_list("country_code", flat=True)
+    link = None
 
-    return link[0].text
+    if any(countries) and country in countries:
+        possible_links = Link.objects.filter(link_id=shid, country_code=country)
+        weigths = possible_links.values_list("weigth", flat=True)
+
+    if 1.0 in weigths:
+        for p in possible_links:
+            if p.weigth == 1.0:
+                link = p.text
+                break
+    elif all(weigths):
+        link = choices(possible_links, weigths, k=1)
+        link = link[0].text
+    else:
+        link = choice(possible_links)
+        link = link.text
+
+    return link
 
 
-def redirect_func(request, id):
-    short_link_id = id
-    link = get_redirect_link(short_link_id)
+def redirect_func(request, _id):
 
     g = GeoIP2()
 
@@ -26,6 +51,15 @@ def redirect_func(request, id):
         ip = x_forwarded_for.split(",")[-1].strip()
     else:
         ip = request.META.get("REMOTE_ADDR")
+    
+    ip = "77.46.192.159"
+    code = g.country_code(ip)
+    #code = "BA"
+
+    link = get_redirect_link(_id, code)
+
+    if not link:
+        return redirect(reverse("dashboard"))
 
     return redirect(link)
 
