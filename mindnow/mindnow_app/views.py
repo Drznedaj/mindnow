@@ -239,3 +239,14 @@ def statistics(request, _id):
             "data": data,
         },
     )
+
+def statistics_ip(request, ip):
+
+    return render(
+        request,
+        "users/ip_statistics.html",
+        {
+            "ip": ip,
+            "data": StatisticLinkData.objects.filter(ip=ip)
+        },
+    )

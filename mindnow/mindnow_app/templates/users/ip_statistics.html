@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Statistics for {{ip}}</h2>
+
+<table>
+    <tr>
+        <th>Country code</th>
+        <th>Country</th>
+        <th>City</th>
+        <th>Continent name</th>
+        <th>Time zone</th>
+        <th>Is in EU</th>
+        <th>Time</th>
+        <th>Date</th>
+    </tr>
+    {% for d in data %}
+        <tr>
+            <td>{{d.country_code}}</td>
+            <td>{{d.country}}</td>
+            <td>{{d.city}}</td>
+            <td>{{d.continent_name}}</td>
+            <td>{{d.time_zone}}</td>
+            <td>{{d.is_in_european_union}}</td>
+            <td>{{d.time}}</td>
+            <td>{{d.date}}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<a href="{% url 'dashboard' %}">Back to dashboard</a>
+
+{% endblock %}
