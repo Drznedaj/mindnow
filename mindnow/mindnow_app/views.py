@@ -223,7 +223,7 @@ def statistics(request, _id):
 
     data = []
 
-    for x in range(len(hours)-2):
+    for x in range(len(hours)-1):
         t = time(hours[x],0,0,0)
         t2 = time(hours[x+1],0,0,0)
         data.append(clicks.filter(date=n.date()).filter(time__gt=t).filter(time__lt=t2).count())
