@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Statistics for {{link_text}}</h2>
+
+<div>Total clicks: {{link.total_clicks}}</div>
+<div>Unique clicks: {{link.unique_clicks}}</div>
+
+<div>Distinct ips:</div>
+{% for ip in ips %}
+<li><a href={% url 'statistics_ip' ip.ip %}>{{ip.ip}}</a></li>
+{% endfor %}
+
+<a href="{% url 'dashboard' %}">Back</a>
+
+{% block graph %}
+{% endblock %}
+
+{% endblock %}
+

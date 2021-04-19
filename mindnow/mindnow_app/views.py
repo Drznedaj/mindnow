@@ -2,6 +2,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import login
 from django.urls import reverse
 from django.contrib.gis.geoip2 import GeoIP2
+from django.utils.timezone import now
+from datetime import time
 from .forms import CustomUserCreationForm, ShortLinkForm, LinkForm
 from .models import ShortLink, Link, StatisticLinkData
 from random import choices, choice
@@ -58,9 +60,18 @@ def save_client_data(_id, geo, ip, code):
     unique_ips = StatisticLinkData.objects.filter(ip=ip)
 
     if not unique_ips:
-        short_link.unique_clicks +=1
-        
-    s = StatisticLinkData(ip=ip, country=country, country_code=code, city=city, link=short_link)
+        short_link.unique_clicks += 1
+
+    s = StatisticLinkData(
+        ip=ip,
+        country=country,
+        country_code=code,
+        city=city,
+        link=short_link,
+        is_in_european_union=is_in_european_union,
+        continent_name=continent_name,
+        time_zone=time_zone,
+    )
 
     short_link.save()
     s.save()
@@ -69,7 +80,7 @@ def save_client_data(_id, geo, ip, code):
 def redirect_func(request, _id):
 
     g = GeoIP2()
-    
+
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
         ip = x_forwarded_for.split(",")[-1].strip()
@@ -78,7 +89,6 @@ def redirect_func(request, _id):
 
     ip = "77.46.192.159"
     code = g.country_code(ip)
-    # code = "BA"
 
     link = get_redirect_link(_id, code)
 
@@ -201,3 +211,31 @@ def edit_link(request, id):
                 "users/edit_link.html",
                 {"form": form, "link": Link.objects.get(id=id), "url_id": link.link.id},
             )
+
+
+def statistics(request, _id):
+
+    short_link = ShortLink.objects.get(id=_id)
+    hours = [x for x in range(24)]
+
+    clicks = StatisticLinkData.objects.filter(link=short_link)
+    n = now()
+
+    data = []
+
+    for x in range(len(hours)-2):
+        t = time(hours[x],0,0,0)
+        t2 = time(hours[x+1],0,0,0)
+        data.append(clicks.filter(date=n.date()).filter(time__gt=t).filter(time__lt=t2).count())
+
+    return render(
+        request,
+        "users/graph.html",
+        {
+            "link_text": str(short_link),
+            "link": short_link,
+            "ips": clicks.values("ip").distinct(),
+            "hours": hours,
+            "data": data,
+        },
+    )

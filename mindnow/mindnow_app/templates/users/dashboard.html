@@ -12,7 +12,8 @@ Hello, {{ user.username|default:'Guest' }}!
                 {{lnk}}
             </a> created by {{lnk.user}} 
             {% ifequal user.id lnk.user.id%}
-            <a href="{% url 'edit_url' lnk.id %}">Editl</a>
+            <a href="{% url 'edit_url' lnk.id %}">Edit</a>
+            <a href="{% url 'statistics' lnk.id %}">Statistics</a>
             {% endifequal %}
         </li>
     {% endfor %}
