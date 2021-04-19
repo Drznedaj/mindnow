@@ -57,7 +57,7 @@ def save_client_data(_id, geo, ip, code):
     short_link = ShortLink.objects.get(id=_id)
     short_link.total_clicks += 1
 
-    unique_ips = StatisticLinkData.objects.filter(ip=ip)
+    unique_ips = StatisticLinkData.objects.filter(link=short_link).filter(ip=ip)
 
     if not unique_ips:
         short_link.unique_clicks += 1
