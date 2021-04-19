@@ -28,7 +28,6 @@ class Link(models.Model):
     def __str__(self):
         return self.text
 
-#{'city': 'Belgrade', 'continent_code': 'EU', 'continent_name': 'Europe', 'country_code': 'RS', 'country_name': 'Serbia', 'dma_code': None, 'is_in_european_union': False, 'latitude': 44.8166, 'longitude': 20.4721, 'postal_code': None, 'region': '00', 'time_zone': 'Europe/Belgrade'}
 class StatisticLinkData(models.Model):
     country_code = models.CharField(max_length=2)
     country = models.CharField(max_length=100)
@@ -42,4 +41,4 @@ class StatisticLinkData(models.Model):
     link = models.ForeignKey(ShortLink, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.ip + " " + self.country + " from: " + city
+        return self.ip + " " + self.country + " from: " + self.city
