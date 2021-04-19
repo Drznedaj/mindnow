@@ -235,6 +235,7 @@ def statistics(request, _id):
             "link_text": str(short_link),
             "link": short_link,
             "ips": clicks.values("ip").distinct(),
+            "num_countries": clicks.values("country_code").distinct().count(),
             "hours": hours,
             "data": data,
         },
