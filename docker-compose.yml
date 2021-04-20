@@ -1,0 +1,21 @@
+version: '3.6'
+
+services:
+  db:
+    image: "postgres:13"
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  web:
+    build: .
+    command: python /mindnow/mindnow/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/mindnow
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
