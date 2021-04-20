@@ -87,6 +87,9 @@ def redirect_func(request, _id):
     else:
         ip = request.META.get("REMOTE_ADDR")
 
+    # ip address is hardcoded here to simulate running a real server
+    # because we are running on localhost for development we can't get
+    # the public ip address of the request
     ip = "77.46.192.159"
     code = g.country_code(ip)
 
